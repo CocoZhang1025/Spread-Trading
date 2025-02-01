@@ -10,7 +10,7 @@ Data Sources: Uses split- and dividend-adjusted closing prices for ETFs download
 
 ## **Strategy Sample**
 - **Assets:** ETF pairs (e.g., `FTXL` and `SMH`)
-- **Trading Period:** 2023-01-01 to latest available data
+- **Trading Period:** 2023-01-01 to 2024-11-15
 
 ## **Key Metrics**
 

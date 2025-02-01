@@ -4,7 +4,7 @@ This repository contains a spread-reversion trading strategy simulation based on
 Takes positions when the difference in M-day returns between ETFs exceeds a threshold.
 Shorts the ETF with a higher recent return and buys the one with a lower return.
 Positions are adjusted based on stop-loss.
----
+
 ## Data:
 Data Sources: Uses split- and dividend-adjusted closing prices for ETFs downloaded from Nasdaq using Quandl.
 ⚠️ Due to GitHub size limits, the dataset is hosted locally on the Desktop/SpreadTrading/Data.

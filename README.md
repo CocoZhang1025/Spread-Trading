@@ -1,43 +1,28 @@
 # Spread-Trading
 This repository contains a spread-reversion trading strategy simulation based on a given ETF pair. The strategy monitors the displacement between two related ETFs (based on recent returns) and trades under the assumption that the displacement will revert to the mean.
-## Trading Strategy Description:
-Takes positions when the difference in M-day returns between ETFs exceeds a threshold.
-Shorts the ETF with a higher recent return and buys the one with a lower return.
-Positions are adjusted based on stop-loss.
+- Takes positions when the difference in M-day returns between ETFs exceeds a threshold.
+- Shorts the ETF with a higher recent return and buys the one with a lower return.
+- Positions are adjusted based on stop-loss.
 
-## Data:
-Data Sources: Uses split- and dividend-adjusted closing prices for ETFs downloaded from Nasdaq using Quandl.
+## **Data**
+Data Sources: Uses split- and dividend-adjusted closing prices for ETFs downloaded from Nasdaq using Quandl.\
 ⚠️ Due to GitHub size limits, the dataset is hosted locally on the Desktop/SpreadTrading/Data.
 
----
-
-## **Strategy Universe**
+## **Strategy Sample**
 - **Assets:** ETF pairs (e.g., `FTXL` and `SMH`)
 - **Trading Period:** 2023-01-01 to latest available data
 
----
-
 ## **Key Metrics**
 
-### **`entry_gross` (Gross Traded Cash at Entry)**
-\[
-\text{entry\_gross} = |\text{position\_x} \times \text{px\_entry\_x}| + |\text{position\_y} \times \text{px\_entry\_y}|
-\]
+**`entry_gross` (Gross Traded Cash at Entry):**
+entry_gross = |position_x * px_entry_x| + |position_y * px_entry_y| 
 
-### **`N_t` (Minimum Rolling Dollar Volume)**
-\[
-N_t := \text{Median} \left( \{V_{t-15}, V_{t-14}, \dots, V_{t-1} \} \right)
-\]
-- Compute the running trailing 15-trading-day median of volume for `X` over the sample period.
+**`N_t` (Minimum Rolling Dollar Volume):**
+N_t = Median({V_t-15, V_t-14, ..., V_t-1}) 
 
-### **Profit and Loss Metrics**
-- **`cum_pnl`**: Realized PnL
-- **`open_pnl`**: Unrealized PnL  
-\[
-\text{PnL} = (\text{exit price}_x - \text{entry price}_x) \times \text{position}_x + (\text{exit price}_y - \text{entry price}_y) \times \text{position}_y - \text{trading costs}
-\]
+**`cum_pnl`**: Realized PnL
 
----
+**`open_pnl`**: Unrealized PnL  
 
 ## **Position Logic**
 
@@ -53,17 +38,13 @@ N_t := \text{Median} \left( \{V_{t-15}, V_{t-14}, \dots, V_{t-1} \} \right)
 3. **Final Flatten:**
     - On the last trading day, close all positions.
 
----
 
 ## **Position Sizing**
-\[
-\text{position}_x = \frac{N_t}{100 \times \text{price}_x}
-\]
-\[
-\text{position}_y = \frac{N_t}{100 \times \text{price}_y}
-\]
+Your strategy’s “trades” are equal-sized dollar amounts of X and Y to
+the nearest integer number of shares, as close as possible to `N_t / (100 * price)` of each.
+Note that Nt changes every day, so trade size will depend on which day
+you open the position.
 
----
 
 ## **Stop-Loss Logic**
 1. If **`open_pnl` < `s * entry_gross`**, trigger **stop-loss**:
@@ -71,17 +52,16 @@ N_t := \text{Median} \left( \{V_{t-15}, V_{t-14}, \dots, V_{t-1} \} \right)
     - **No new positions until month-end**.
 2. Resume trading on the first trading day of the next month.
 
----
 
 ## **Trading Costs**
 - Assume a proportional trading cost parameter **ζ**.
-- Immediate loss is **ζ × gross traded entry position cash**.
+- Entering loss is **ζ × gross traded entry position cash**.
 - Exit cost is **ζ × gross traded exit position cash**.
 
 ---
 
 ## 🚀 **Performance Evaluation**
-Tracks mark-to-market PnL and cumulative returns.
-Analyzes strategy performance across different parameter values.
-The implementation includes parameter tuning and performance visualization to identify optimal strategy settings.
+- Tracks mark-to-market PnL and cumulative returns.
+- Analyzes strategy performance across different parameter values.
+- The implementation includes parameter tuning and performance visualization to identify optimal strategy settings.
 
